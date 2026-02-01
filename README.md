@@ -43,4 +43,3 @@ python manage.py createsuperuser
  - git commit -m 'commit' 
  заливает коммит
 
- git clone "ссылку с гита"
