@@ -1,9 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-# from django.http import HttpResponse
-from blog.models import Post
 
-# def home_view(request):
-#   return HttpResponse('Главная страница')
+from blog.models import Post
+from blog.forms import PostForm
+
 
 def get_post_list(request):
   posts = Post.objects.all()
@@ -20,31 +19,20 @@ def get_post_detail(request, post_id):
 
 def create_post(request):  
   if request.method == "POST":
-    title = request.POST.get('title').strip()
-    text = request.POST.get('text').strip()
+    form = PostForm(request.POST)
 
-    errors ={}
-
-    if not title:
-      errors['title'] = 'Вы забыли заголовок?'
-    if not text:
-      errors['text'] = 'Вы забыли слова?'
-    
-    if not errors:
-      post = Post.objects.create(title=title, text=text)
-
-
-    # post = Post.objects.create(title=request.POST.get('title'), text=request.POST.get('text'))
-
+    if form.is_valid():
+      post = Post.objects.create(
+        title=form.cleaned_data['title'],
+        text=form.cleaned_data['text']
+      )
+      
       return redirect('post_detail', post_id=post.id)
     else:
-      context = {
-        'errors': errors,
-        'title': title,
-        'text': text
-    }
+      return render(request, 'blog/post_add.html', {"form": form})
 
-    return render(request, 'blog/post_add.html', context)
+    
+  form = PostForm()
   
   
-  return render(request, 'blog/post_add.html')
+  return render(request, 'blog/post_add.html', {"form": form})
