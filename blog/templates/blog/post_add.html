@@ -10,12 +10,26 @@
 
         <div>
             <label for="titleInput"> Заголовок объявления: </label>
-            <input id="titleInput" name="title" type="text" placehplder="заголовок (максимальная длина 200 символов)" required>
+            <input 
+                id="titleInput" 
+                name="title" 
+                type="text" 
+                value="{{ title|default:''}}"
+                placehplder="заголовок (максимальная длина 200 символов)"
+            >
+            
+            {% if errors.title %}
+                <div style="color: red; ">{{ errors.title }}</div>
+            {% endif %}
         </div>
+        
 
         <div>
             <label for="textInput"> Текст поста: </label>
-            <textarea id="textInput" name="text" rows="3"></textarea>
+            <textarea id="textInput" name="text" rows="3">{{ text|default:'' }}</textarea>
+            {% if errors.text %}
+                <div style="color: red;">{{ errors.text }}</div>
+            {% endif %}
         </div>
 
         <button type="submit">Создать</button>

@@ -23,6 +23,28 @@ def create_post(request):
     return render(request, 'blog/post_add.html')
   
   if request.method == "POST":
-    post = Post.objects.create(title=request.POST.get('title'), text=request.POST.get('text'))
+    title = request.POST.get('title').strip()
+    text = request.POST.get('text').strip()
 
-    return redirect('post_detail', post_id=post.id)
+    errors ={}
+
+    if not title:
+      errors['title'] = 'Вы забыли заголовок?'
+    if not text:
+      errors['text'] = 'Вы забыли слова?'
+    
+    if not errors:
+      post = Post.objects.create(title=title, text=text)
+
+
+    # post = Post.objects.create(title=request.POST.get('title'), text=request.POST.get('text'))
+
+      return redirect('post_detail', post_id=post.id)
+    else:
+      context = {
+        'errors': errors,
+        'title': title,
+        'text': text
+    }
+
+    return render(request, 'blog/post_add.html', context)
