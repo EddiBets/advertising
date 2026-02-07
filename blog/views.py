@@ -17,7 +17,11 @@ def get_post_detail(request, post_id):
   return render(request, 'blog/post_detail.html', {'post': get_object_or_404(Post, id=post_id)})
 
 
-def create_post(request):  
+def create_post(request):
+  title = 'Создать пост'
+  submit_button_text = 'Создать'
+
+
   form = PostForm(request.POST or None)
 
   if request.method == "POST":
@@ -28,9 +32,13 @@ def create_post(request):
       return redirect('post_detail', post_id=post.id)
 
   
-  return render(request, 'blog/post_add.html', {"form": form})
+  return render(request, 'blog/post_form.html', {"form": form, 'title': title, 'submit_button_text': submit_button_text})
 
 def update_post(request, post_id):
+  title = 'Редактировать пост'
+  submit_button_text = 'Обновить'
+
+
   post = get_object_or_404(Post, id=post_id)
 
   if request.method =='POST':
@@ -41,8 +49,8 @@ def update_post(request, post_id):
 
       return redirect('post_detail', post_id=post.id)
     else:
-      return render(request, 'blog/post_update.html', context={"form": form})
+      return render(request, 'blog/post_form.html', context={"form": form, 'title': title, 'submit_button_text': submit_button_text})
     
   form = PostForm(instance=post)
 
-  return render(request, 'blog/post_update.html', context={"form": form})
+  return render(request, 'blog/post_form.html', context={"form": form, 'title': title, 'submit_button_text': submit_button_text})
