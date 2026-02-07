@@ -8,7 +8,26 @@
     <form method="POST">
         {% csrf_token %}
 
+        {% comment %} 
+        Вариант 1
         {{ form.as_p }}
+        {% endcomment %} 
+
+        {% comment %} 
+        {{ form.as_div }}
+        Вариант 2
+        {% endcomment %}
+
+        {% for field in form %}
+            <div>
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+            </div>
+        
+        {% endfor %}
+
+
 
         <button type="submit">Создать</button>
     </form>
