@@ -56,7 +56,17 @@ def update_post(request, post_id):
   return render(request, 'blog/post_form.html', context={"form": form, 'title': title, 'submit_button_text': submit_button_text})
 
 
-def delete_post(request, post_id):
-  post = get_object_or_404(Post, id=post_id).delete()
+# def delete_post(request, post_id):
+#   post = get_object_or_404(Post, id=post_id).delete()
 
-  return redirect('post_list')
+#   return redirect('post_list')
+
+def delete_post(request, post_id):
+  post = get_object_or_404(Post, id=post_id)
+
+  if request.method == "POST":
+    post.delete()
+
+    return redirect('post_list')
+
+  return render(request, 'blog/confirm_post_delete.html', {'post':post})

@@ -13,9 +13,10 @@
 
 
   <a href='{% url "edit_post" post.id %}'> Редактировать пост</a>
-  <form method="POST" action={% url "remove_post" post.id %}>
+  <a href='{% url "remove_post" post.id %}'> Удалить пост</a>
+  {% comment %} <form method="POST" action={% url "remove_post" post.id %}>
     {% csrf_token %}
 
     <button type='submit'>Удалить пост</button>
-  </form>
+  </form> {% endcomment %}
 {% endblock page_content %}
