@@ -34,10 +34,10 @@ def create_post(request):
   
   return render(request, 'blog/post_form.html', {"form": form, 'title': title, 'submit_button_text': submit_button_text})
 
+
 def update_post(request, post_id):
   title = 'Редактировать пост'
   submit_button_text = 'Обновить'
-
 
   post = get_object_or_404(Post, id=post_id)
 
@@ -54,3 +54,9 @@ def update_post(request, post_id):
   form = PostForm(instance=post)
 
   return render(request, 'blog/post_form.html', context={"form": form, 'title': title, 'submit_button_text': submit_button_text})
+
+
+def delete_post(request, post_id):
+  post = get_object_or_404(Post, id=post_id).delete()
+
+  return redirect('post_list')
