@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block page_title %}Войти в аккаунт{% endblock page_title %}
+
+{% block page_content %}
+  <h1>Вход в аккаунт</a>
+    <form method='POST'>
+      {% csrf_token %}
+
+      <div class='w-50 mx-auto'>
+        <h1 class='text-center'>Вход в аккаунт</h1>
+        {% bootstrap_form form%}
+      <button type='submit' class='btn btn-dark'>Войти</button>
+    </form>
+{% endblock page_content %}
