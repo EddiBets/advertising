@@ -42,7 +42,7 @@
             </li> {% endcomment %}
             {% if request.user.is_authenticated %}
               <li class="nav-item">
-                <a class="nav-link disabled" href='#'>Привет, {{ request.user }}</a>
+                <a class="nav-link" href="{% url "users:profile" request.user.username %}">Привет, {{ request.user }}</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="{% url 'users:logout' %}">Выйти из аккаунта</a>

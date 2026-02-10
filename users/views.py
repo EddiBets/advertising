@@ -1,43 +1,59 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 
-# from config.settings import DEFAULT_LOGIN_REDIRECT_URL
 from django.conf import settings
+from blog.models import Post
+
+User = get_user_model()
 
 
 def register_view(request):
-  if request.method == 'POST':
+  if request.method == "POST":
     form = UserCreationForm(request.POST)
 
     if form.is_valid():
       form.save()
-      # return redirect('blog:post_list')
       return redirect('users:login')
     else:
-      return render(request, 'users/register.html', {'form':form})
-    
+      return render(request, 'users/register.html', {'form': form})
+
   form = UserCreationForm()
 
-  return render(request, 'users/register.html', {'form':form})
+  return render(request, 'users/register.html', {'form': form})
+
 
 def login_view(request):
-  if request.method == 'POST':
+  if request.method == "POST":
     form = AuthenticationForm(data=request.POST)
     if form.is_valid():
       login(request, form.get_user())
 
-      # return redirect('blog:post_list')
-      next_url = request.GET.get('next', settings.DEFAULT_LOGIN_REDIRECT_URL)
-      return redirect(next_url)
+      next_url = request.GET.get('next', settings.DEFAULT_LOGIN_REDIRECT_URL) # next будет '/posts/add/', например
+      if next_url == settings.DEFAULT_LOGIN_REDIRECT_URL:
+        return redirect(next_url, request.user.username)
+      else:
+        return redirect(next_url)
     else:
-      return render(request, 'users/login.html', {'form':form})
-    
+      return render(request, 'users/login.html', {'form': form})
 
   form = AuthenticationForm()
 
-  return render(request, 'users/login.html', {'form':form})
+  return render(request, 'users/login.html', {'form': form})
+
 
 def logout_view(request):
   logout(request)
   return redirect("blog:post_list")
+
+
+def profile_view(request, username):
+  user = get_object_or_404(User, username=username)
+  posts = user.posts.order_by('-created_at')
+
+  context = {
+    'user': user,
+    'posts': posts
+  }
+
+  return render(request, 'users/profile.html', context)
