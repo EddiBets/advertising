@@ -45,6 +45,10 @@ def update_post(request, post_id):
 
   post = get_object_or_404(Post, id=post_id)
 
+  if (request.user != post.author):
+    return render(request, 'blog/not_allowed.html')
+  
+
   if request.method =='POST':
     form = PostForm(request.POST, instance=post)
 
@@ -67,6 +71,9 @@ def update_post(request, post_id):
 
 def delete_post(request, post_id):
   post = get_object_or_404(Post, id=post_id)
+
+  if (request.user != post.author):
+    return render(request, 'blog/not_allowed.html')
 
   if request.method == "POST":
     post.delete()
