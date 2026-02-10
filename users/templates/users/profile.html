@@ -11,11 +11,7 @@
 
   {% if posts %}
     {% for post in posts %}
-      <div class="post-container" style="border: 1px solid black; margin-bottom: 10px; padding: 15px;">
-        <h2>Тема анекдота: <a href="{% url 'blog:post_detail' post.id %}">{{ post.title }}</a></h2>
-        <p>Текст анекдота: {{ post.text }}</p>
-        <small>Дата написания анекдота: {{ post.created_at|date:"d.m.Y H:i" }}</small>
-      </div>
+      {% include 'blog/includes/post_container.html' %}
     {% endfor %}
   {% else %}
     <p>Анекдотов пока нет. Загляните позже!</p>
