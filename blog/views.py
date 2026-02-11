@@ -23,7 +23,7 @@ def create_post(request):
   submit_button_text = 'Создать'
 
 
-  form = PostForm(request.POST or None)
+  form = PostForm(request.POST or None, request.FILES or None)
 
   if request.method == "POST":
     if form.is_valid():
@@ -50,7 +50,7 @@ def update_post(request, post_id):
   
 
   if request.method =='POST':
-    form = PostForm(request.POST, instance=post)
+    form = PostForm(request.POST, request.FILES, instance=post)
 
     if form.is_valid():
       updated_post = form.save()
