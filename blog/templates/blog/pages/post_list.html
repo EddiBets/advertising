@@ -10,9 +10,10 @@
       {% include 'blog/includes/post_container.html' %}
     {% endfor %}
   {% else %}
-    <p>Анекдотов еще нет, посмеемся позже!</p>
+    <p>Постов еще нет, станьте первым!</p>
   {% endif %}
-  
+
+  {% include "blog/includes/pagination.html" %}
 {% endblock page_content %}
 
 
