@@ -33,6 +33,9 @@
               <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.url_name == 'new_post' %}active{% endif %}" aria-current="page" href="{% url 'blog:new_post' %}">Создать пост</a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.url_name == 'post_search' %}active{% endif %}" href="{% url 'blog:post_search' %}">Поиск постов</a>
+              </li>
             </ul>
             <ul class="navbar-nav">
               {% if request.user.is_authenticated %}
@@ -61,7 +64,7 @@
       </nav>
     </header>
     <main>{% block page_content %}{% endblock page_content %}</main>
-    <footer>&copy; Все права защищены 2025</footer>
+    <footer class="text-center">&copy; Все права защищены 2026</footer>
 
     <button id="scrollToTopBtn" class="scroll-to-top disabled">
       {% bs_icon 'arrow-up' size="25px" %}
