@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import F
 
 from blog.models import Post, Category, Tag
 from blog.forms import PostForm
@@ -53,6 +54,17 @@ class PostDetailView(DetailView):
   # context_object_name = 'post' Необязательно
   # slug_field = 'slug' Необязательно
 
+  def get_object(self, queryset=None):
+    post = super().get_object(queryset)
+
+    session_key = f'post_{post.id}_viewed' # "post_32_viewed"
+    if not self.request.session.get(session_key, False) and post.author != self.request.user:
+      Post.objects.filter(id=post.id).update(views=F("views") + 1)
+      post.views = post.views + 1
+      self.request.session[session_key] = True
+
+    return post
+
 
 class CreatePostView(LoginRequiredMixin, CreateView):
   form_class = PostForm
@@ -67,7 +79,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     post.author = self.request.user
     post.save()
 
-    tags = form.cleaned_data.get('tags_input', [])
+    tags = form.cleaned_data.get('tags_input')
     for tag_name in tags:
       tag, _ = Tag.objects.get_or_create(name=tag_name)
       post.tags.add(tag)
@@ -75,7 +87,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     return redirect('blog:post_detail', post_slug=post.slug)
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(UpdateView):
   model = Post
   pk_url_kwarg = 'post_id'  # потому что в url <int:post_id>, а не <int:id>
   form_class = PostForm
