@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block page_title %}Профиль{% endblock page_title %}
@@ -19,4 +18,6 @@
   {% else %}
     <p>Постов ещё нет. Загляните позже!</p>
   {% endif %}
+
+  {% include "blog/includes/pagination.html" %}
 {% endblock page_content %}
