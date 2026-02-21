@@ -1,4 +1,4 @@
-{% extends 'layouds/base.html' %}
+{% extends 'layouts/base.html' %}
 {% load static %}
 
 {% block page_title %}Посты в категории {{ category.name }}{% endblock page_title %}
@@ -6,6 +6,10 @@
 {% block styles %}
   <link rel="stylesheet" href="{% static "blog/css/includes/post_container.css" %}">
 {% endblock styles %}
+
+{% block scripts %}
+  <script src="{% static "blog/js/favorites.js" %}" type="module" defer></script>
+{% endblock scripts %}
 
 {% block page_content %}
   <a href="javascript:history.back()">&larr;Назад</a>
