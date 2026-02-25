@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView
-from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.views.generic.list import MultipleObjectMixin
 from django.contrib import messages
 
@@ -37,13 +37,26 @@ class CustomLogoutView(LogoutView):
   next_page = reverse_lazy('blog:post_list')
 
 
+class CustomPasswordChangeView(PasswordChangeView):
+  template_name = 'users/pages/password_change.html'
+  success_url = reverse_lazy('users:password_change_done')
+  
+  def form_valid(self, form):
+    messages.success(self.request, 'Пароль успешно изменен!')
+    return super().form_valid(form)
+
+
+class PasswordChangeDoneView(TemplateView):
+  template_name = 'users/pages/password_change_done.html'
+
+
 class ProfileView(DetailView, MultipleObjectMixin):
   model = User
   slug_url_kwarg = 'username'
   slug_field = 'username'
   template_name = 'users/pages/index.html'
   paginate_by = 4
-  context_object_name = 'user'
+  context_object_name = 'user' # Теперь обязательно
 
   def get_context_data(self, **kwargs):
     posts = self.object.posts.order_by('-created_at')
