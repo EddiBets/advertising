@@ -14,7 +14,7 @@
 
 {% block profile_page_content %}
   {% if user == request.user %}
-    <h1>Мой блог</h1>
+    <h1 class="text-center">Мой блог</h1>
   {% else %}
     <h1>Блог пользователя {{ user }}</h1>
   {% endif %}
